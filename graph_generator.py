@@ -5,10 +5,12 @@ Created on Fri Apr  8 17:26:54 2022
 
 @author: camille
 """
-
+######## IMPORTATIONS #########
 import numpy as np
 import random as rd
+from numpy.random import permutation
 
+##############################################################################
 
 #cette fonction permet de générer un graph bipartite de base 
 
@@ -56,21 +58,50 @@ def step_gready(allocation,new_node):
     return 
     
 
-def gready(d_U,d_v):
+def gready(d_U,d_V):
     #input :  two sequences5 of nonnegative integers
-    #d_u de taille N 
-    #d_v de taille T
-    T=len(du_v)
-    M0=[]
-    eps0=[]
+    #d_U de taille N = degrés des sommet de U c'est à dire le nombre de demi arrete que comporte chaque somment de U
+    #d_V de taille T = degrés des sommets de V
+    N=len(d_U)
+    T=len(d_V)
+    M=[]
+    eps=[]
     #H0=half edges de U
-    #p=permutation de 1:kt
-    for i in range(kt):
-        
+    H=d_U[:]
+    for t in range(T): #attention aux indices
+        #Pt=permutation(np.arrange(d_V[t]))
+        #on considère que les aretes d'un meme sommet sont interchangeables   
+        for i in range(d_V[t]):
+            nb_aretes_dispo=np.sum(H)
+            #sert à selectionner une demi-arete uniformément dans les demi-aretes encore dispo de U
+            if nb_aretes_dispo>0:
+                curseur = rd.randrange(1,nb_aretes_dispo+1)
+                res=0
+                i=0
+                while res<curseur:
+                    res+=H[i]
+                    i+=1
+                i-=1 #c'est le sommet de la demi arrete encore dispo de U qu'on selectionne 
+                eps.append((i,t))#on rajoute la nouvelle arete a la liste des aretes 
+                H[i]-=1 #on rend la demi-arete de U indisponible
+                if (i,t) not in M:
+                    M.append((i,t))
+    return (eps,M)
+                
+            
+             
+                
         
         
         
 
 ### TEST ###
+#d_U=[2,3,1,3]
+#d_V=[2,1,2]
 
-test = graph_generator(4,5,8)
+d_U=[2,1,2,1]
+d_V=[2,4,3]
+
+test = gready(d_U,d_V)
+print(test)
+
