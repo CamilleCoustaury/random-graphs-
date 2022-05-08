@@ -9,6 +9,8 @@ Created on Fri Apr  8 17:26:54 2022
 import numpy as np
 import random as rd
 from numpy.random import permutation
+import networkx as nx
+from networkx.algorithms import bipartite
 
 ##############################################################################
 
@@ -68,6 +70,13 @@ def gready(d_U,d_V):
     eps=[]
     #H0=half edges de U
     H=d_U[:]
+    ##### Pour le tracé #####
+    U=["L"+str(i) for i in range(len(d_U))]
+    V=["R"+str(i) for i in range(len(d_V))]
+    G = nx.Graph()
+    G.add_nodes_from(U, bipartite=0)
+    G.add_nodes_from(V,bipartite=1)
+    ########################
     for t in range(T): #attention aux indices
         #Pt=permutation(np.arrange(d_V[t]))
         #on considère que les aretes d'un meme sommet sont interchangeables   
@@ -82,10 +91,12 @@ def gready(d_U,d_V):
                     res+=H[i]
                     i+=1
                 i-=1 #c'est le sommet de la demi arrete encore dispo de U qu'on selectionne 
-                eps.append((i,t))#on rajoute la nouvelle arete a la liste des aretes 
+                eps.append(("L"+str(i),"R"+str(t)))#on rajoute la nouvelle arete a la liste des aretes 
                 H[i]-=1 #on rend la demi-arete de U indisponible
                 if (i,t) not in M:
                     M.append((i,t))
+                G.add_edges_from(eps)
+                nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
     return (eps,M)
                 
             
