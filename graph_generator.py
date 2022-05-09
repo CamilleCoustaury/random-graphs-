@@ -96,7 +96,7 @@ def gready(d_U,d_V):
                 if (i,t) not in M:
                     M.append((i,t))
                 G.add_edges_from(eps)
-                nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
+                #nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
     return (eps,M)
                 
             

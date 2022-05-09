@@ -8,7 +8,7 @@ Created on Fri May  6 14:46:40 2022
 
 from random import seed
 import random as rd
-#import numpy as np
+
 
 import networkx as nx
 from networkx.algorithms import bipartite
