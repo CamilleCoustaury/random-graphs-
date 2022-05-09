@@ -110,9 +110,9 @@ def gready(d_U,d_V):
 #d_U=[2,3,1,3]
 #d_V=[2,1,2]
 
-d_U=[2,1,2,1]
-d_V=[2,4,3]
+#d_U=[2,1,2,1]
+#d_V=[2,4,3]
 
-test = gready(d_U,d_V)
-print(test)
+#test = gready(d_U,d_V)
+#print(test)
 
