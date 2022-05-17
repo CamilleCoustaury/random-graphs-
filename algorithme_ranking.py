@@ -57,11 +57,11 @@ def ranking(d_L,d_R):
 #test = ranking(d_U,d_V)
 #print(test)
 
-#"""
-#G = nx.Graph()
-#G.add_nodes_from(U, bipartite=0)
-#G.add_nodes_from(V,bipartite=1)
-#G.add_edges_from(test[0])
-#bipartite.is_bipartite(G)
-#nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
-#"""
+"""
+G = nx.Graph()
+G.add_nodes_from(U, bipartite=0)
+G.add_nodes_from(V,bipartite=1)
+G.add_edges_from(test[0])
+bipartite.is_bipartite(G)
+nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
+"""

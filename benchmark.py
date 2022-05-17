@@ -19,7 +19,7 @@ from graph_generator import gready
 import matplotlib.pyplot as plt
 
 
-def benchmark1(sizes=([3,3], [5,3], [10,10], [100,100], [1000,1000]),capacity=3, runs=100, method=ranking):
+def benchmark1(sizes=[3,5,10,100,1000],capacity=3, runs=100, method=ranking):
     """
     For each size in the 'sizes' list, compute the average time over a given number of runs to find the matching
     for a bipartit graph of that size,
@@ -36,13 +36,13 @@ def benchmark1(sizes=([3,3], [5,3], [10,10], [100,100], [1000,1000]),capacity=3,
         for s in sizes:
             tot = 0.0
             for _ in range(runs):
-                d_L=[rd.randint(1, capacity) for x in range(s[0])]
-                d_R=[rd.randint(1, capacity) for x in range(s[1])]
+                d_L=[rd.randint(1, capacity) for x in range(s)]
+                d_R=[rd.randint(1, capacity) for x in range(s)]
                 t0 = time.time()
                 method(d_L, d_R)
                 tot += (time.time() - t0)
                 bar.update(1)
-            print("size %d time: %0.5f" % (s[0], tot / float(runs)))
+            print("size : %d,time: %0.5f | " % (s, tot / float(runs)),end="\r")
             results.append(tot / float(runs))
     return {'sizes': sizes, 'avg time': results}
 
@@ -69,7 +69,7 @@ def benchmark2(size=[100,100],capacity=[i for i in range(1,20)], runs=100, metho
                 method(d_L, d_R)
                 tot += (time.time() - t0)
                 bar.update(1)
-            print("capacity %d time: %0.5f" % (capacity[0], tot / float(runs)))
+            print("capacity : %d, time: %0.5f | " % (c, tot / float(runs)), end="\r\r")
             results.append(tot / float(runs))
     return {'capacity': capacity, 'avg time': results}
 
@@ -80,19 +80,19 @@ def main1():
 
     :return: nothing
     """
-    algorithms = [ranking,gready]
+    algorithms = [ranking,gready]  
 
     results = {}
 
     for algorithm in algorithms:
         #sizes = (*range(10, 11, 1), *range(1000, 10001, 1000))
-        sizes = ([3,3], [5,5], [10,10],[20,20],[30,30],[40,40],[50,50],[100,100],[200,200])
+        sizes = [3,5,10,20,30,40,50,100,200]
         capacity=3
         runs = 10
         results[algorithm] = benchmark1(sizes=sizes,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
         plt.plot(results[algorithm]['sizes'], results[algorithm]['avg time'], label=str(algorithm.__name__))
-
+        
     #plt.show()
     plt.legend()
     plt.title("Matching algorithms execution time (capacity = %d )" %(capacity))
@@ -108,7 +108,7 @@ def main2():
 
     :return: nothing
     """
-    algorithms = [ranking,gready]
+    algorithms = [ranking,gready]  
 
     results = {}
 
@@ -120,7 +120,7 @@ def main2():
         results[algorithm] = benchmark2(size=size,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
         plt.plot(results[algorithm]['capacity'], results[algorithm]['avg time'], label=str(algorithm.__name__))
-
+        
     #plt.show()
     plt.legend()
     plt.title("Matching algorithms execution time (size = %d )" %(size[0]))
@@ -130,12 +130,9 @@ def main2():
     plt.show()
     plt.close()
 
-if __name__ == "__main__":
-    main1()
-    #main2()
 
 
-def benchmark3(sizes=([3,3], [5,3], [10,10], [100,100], [1000,1000]),capacity=3, runs=100, method=ranking):
+def benchmark3(sizes=[3,5,10,100,200],capacity=3, runs=100, method=ranking):
     """
     For each size in the 'sizes' list, compute the average time over a given number of runs to find the matching
     for a bipartit graph of that size,
@@ -150,15 +147,18 @@ def benchmark3(sizes=([3,3], [5,3], [10,10], [100,100], [1000,1000]),capacity=3,
     results = []
     with tqdm.tqdm(total=len(sizes) * runs, desc="Progress (" + method.__name__[:6] + ")") as bar:
         for s in sizes:
-            tot = 0.0
+            card_M = 0.0
             for _ in range(runs):
-                d_L=[rd.randint(1, capacity) for x in range(s[0])]
-                d_R=[rd.randint(1, capacity) for x in range(s[1])]
+                #d_L=[rd.randint(0, capacity) for x in range(s)]
+                d_L=[capacity for x in range(s)]# pour les d-graphes
+                #d_R=[rd.randint(0, capacity) for x in range(s)]
+                d_R=[capacity for x in range(s)]# pour les d-graphes
                 test = method(d_L, d_R)
-                card_M = len(test[1])
+                if len(test[0])>0:
+                    card_M += len(test[1])/len(test[0])
                 bar.update(1)
-            print("size %d time: %0.5f" % (s[0], card_M)) #C'est quoi ce charabia?
-            results.append(card_M)
+            print("size : %d competitive ratio: %0.5f" % (s, card_M)) #C'est quoi ce charabia?
+            results.append(card_M/float(runs))
     return {'sizes': sizes, 'competitive_ratio': results}
 
 
@@ -173,9 +173,8 @@ def main3():
     results = {}
 
     for algorithm in algorithms:
-        #sizes = (*range(10, 11, 1), *range(1000, 10001, 1000))
-        sizes = ([3,3], [5,5], [10,10],[20,20],[30,30],[40,40],[50,50],[100,100],[200,200],[500,500])
-        capacity=3
+        sizes = [3,5,10,15,20,25,30,35,40,45,50,100,200]
+        capacity=6
         runs = 10
         results[algorithm] = benchmark3(sizes=sizes,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
@@ -189,3 +188,9 @@ def main3():
     plt.savefig("matching.png")
     plt.show()
     plt.close()
+    
+ ##############################################################################   
+if __name__ == "__main__":
+    #main1()
+    #main2()
+    main3()
