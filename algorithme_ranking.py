@@ -35,8 +35,10 @@ def ranking(d_L,d_R):
                         curseur = j
                 eps.append(("L"+str(curseur),"R"+str(t)))#on rajoute la nouvelle arete a la liste des aretes
                 H[curseur]-=1 #on rend la demi-arete de L indisponible
-                if (curseur,t) not in M:
-                    M.append((curseur,t))
+                if "L"+str(curseur) not in M:
+                    M.append("L"+str(curseur))
+                if "R"+str(t) not in M:
+                    M.append("R"+str(t))
     G.add_edges_from(eps)
     #nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
     return (eps,M)
