@@ -209,13 +209,14 @@ def benchmark4(size=[100,100],capacity=[i for i in range(1,20)], runs=100, metho
         for c in capacity:
             tot = 0.0
             for _ in range(runs):
-                d_L=[rd.randint(0, c) for x in range(size[0])]
-                #d_L=[c for x in range(size[0])]# pour les d-graphes
-                d_R=[rd.randint(0, c) for x in range(size[1])]
-                #d_R=[c for x in range(size[1])]# pour les d-graphes
+                #d_L=[rd.randint(0, c) for x in range(size[0])]
+                d_L=[c for x in range(size[0])]# pour les d-graphes
+                #d_R=[rd.randint(0, c) for x in range(size[1])]
+                d_R=[c for x in range(size[1])]# pour les d-graphes
                 test = method(d_L, d_R)
-                if len(test[0])>0:
-                    tot += len(test[1])/len(test[0])
+                #if len(test[0])>0:
+                #   tot += len(test[1])/len(test[0])
+                tot += len(test[1])/(size[0]+size[1])
                 bar.update(1)
             print("capacity : %d, competitive ratio: %0.5f | " % (c, tot / float(runs)), end="\r\r")
             results.append(tot / float(runs))
@@ -235,9 +236,9 @@ def main4():
 
     for algorithm in algorithms:
         #sizes = (*range(10, 11, 1), *range(1000, 10001, 1000))
-        size = [200,200]
-        capacity=[i for i in range(1,5)]
-        runs = 20
+        size = [100,150]
+        capacity=[i for i in range(1,20)]
+        runs = 10
         results[algorithm] = benchmark4(size=size,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
         plt.plot(results[algorithm]['capacity'], results[algorithm]['competitive_ratio'], label=str(algorithm.__name__))
