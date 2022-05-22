@@ -93,10 +93,12 @@ def gready(d_U,d_V):
                 i-=1 #c'est le sommet de la demi arrete encore dispo de U qu'on selectionne 
                 eps.append(("L"+str(i),"R"+str(t)))#on rajoute la nouvelle arete a la liste des aretes 
                 H[i]-=1 #on rend la demi-arete de U indisponible
-                if (i,t) not in M:
-                    M.append((i,t))
+                if "L"+str(i) not in M:
+                    M.append("L"+str(i))
+                if "R"+str(t) not in M:
+                    M.append("R"+str(t))
                 G.add_edges_from(eps)
-                #nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
+                nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
     return (eps,M)
                 
             
@@ -110,9 +112,9 @@ def gready(d_U,d_V):
 #d_U=[2,3,1,3]
 #d_V=[2,1,2]
 
-#d_U=[2,1,2,1]
-#d_V=[2,4,3]
+d_U=[2,1,2,1]
+d_V=[2,4,3]
 
-#test = gready(d_U,d_V)
-#print(test)
+test = gready(d_U,d_V)
+print(test)
 
