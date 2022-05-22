@@ -21,7 +21,7 @@ import os
 
 #clearConsole()
 
-def main(left=2,right=3):
+def main(left=10,right=10):
     """
     A sample main program to test our algorithms.
 
@@ -33,9 +33,11 @@ def main(left=2,right=3):
     d_L=[rd.randint(1, 3) for x in range(left)]
     d_R=[rd.randint(1, 3) for x in range(right)]
     
-    test = gready(d_L,d_R)
-    #test = ranking(d_L,d_R)
-    print (test)
+    #test = gready(d_L,d_R)
+    test = ranking(d_L,d_R)
+    #print (test)
+    print(len(test[0]))
+    print(len(test[1]))
     
 
 if __name__ == "__main__":

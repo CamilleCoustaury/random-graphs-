@@ -156,6 +156,7 @@ def benchmark3(sizes=[3,5,10,100,200],capacity=3, runs=100, method=ranking):
                 test = method(d_L, d_R)
                 if len(test[0])>0:
                     card_M += len(test[1])/len(test[0])
+                #card_M += len(test[1])
                 bar.update(1)
             print("size : %d competitive ratio: %0.5f" % (s, card_M)) #C'est quoi ce charabia?
             results.append(card_M/float(runs))
@@ -173,8 +174,8 @@ def main3():
     results = {}
 
     for algorithm in algorithms:
-        sizes = [3,5,10,15,20,25,30,35,40,45,50,100,200]
-        capacity=6
+        sizes = [5,10,15,20,25,30,35,40,50,60,70,80,90,100]
+        capacity=4
         runs = 10
         results[algorithm] = benchmark3(sizes=sizes,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
@@ -188,9 +189,70 @@ def main3():
     plt.savefig("matching.png")
     plt.show()
     plt.close()
-    
+
+
+#PLOT COMPETITIVE RATIO EN FONCTION DE LA CAPACITE
+
+def benchmark4(size=[100,100],capacity=[i for i in range(1,20)], runs=100, method=ranking):
+    """
+    For each size in the 'sizes' list, compute the average time over a given number of runs to find the matching
+    for a bipartit graph of that size,
+    :param sizes: list of problem sizes to consider (default is ([3,3], [5,3], [10,10], [100,100], [1000,1000]))
+    :param method: the name of the algorithm to use (default is ranking)
+    :param runs: the number of repetition to perform for computing average (default is 100)
+    :return: nothing
+    """
+    print(method.__name__)
+    seed(0)
+    results = []
+    with tqdm.tqdm(total=len(capacity) * runs, desc="Progress (" + method.__name__[:6] + ")") as bar:
+        for c in capacity:
+            tot = 0.0
+            for _ in range(runs):
+                d_L=[rd.randint(0, c) for x in range(size[0])]
+                #d_L=[c for x in range(size[0])]# pour les d-graphes
+                d_R=[rd.randint(0, c) for x in range(size[1])]
+                #d_R=[c for x in range(size[1])]# pour les d-graphes
+                test = method(d_L, d_R)
+                if len(test[0])>0:
+                    tot += len(test[1])/len(test[0])
+                bar.update(1)
+            print("capacity : %d, competitive ratio: %0.5f | " % (c, tot / float(runs)), end="\r\r")
+            results.append(tot / float(runs))
+    return {'capacity': capacity, 'competitive_ratio': results}
+
+
+
+def main4():
+    """
+    A sample main program.
+
+    :return: nothing
+    """
+    algorithms = [ranking,gready]  
+
+    results = {}
+
+    for algorithm in algorithms:
+        #sizes = (*range(10, 11, 1), *range(1000, 10001, 1000))
+        size = [200,200]
+        capacity=[i for i in range(1,5)]
+        runs = 20
+        results[algorithm] = benchmark4(size=size,capacity=capacity, runs=runs, method=algorithm)
+        print(algorithm)
+        plt.plot(results[algorithm]['capacity'], results[algorithm]['competitive_ratio'], label=str(algorithm.__name__))
+        
+    #plt.show()
+    plt.legend()
+    plt.title("Matching algorithms competitive ratio (size = %d )" %(size[0]))
+    plt.xlabel("capacity")
+    plt.ylabel("competitive ratio")
+    plt.savefig("matching.png")
+    plt.show()
+    plt.close()    
  ##############################################################################   
 if __name__ == "__main__":
     #main1()
     #main2()
-    main3()
+    #main3()
+    main4()
