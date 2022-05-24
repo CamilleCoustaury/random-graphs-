@@ -86,8 +86,8 @@ def main1():
 
     for algorithm in algorithms:
         #sizes = (*range(10, 11, 1), *range(1000, 10001, 1000))
-        sizes = [3,5,10,20,30,40,50,100,200,300,500]
-        capacity=2
+        sizes = [3,5,10,20,30,40,50,100,200]
+        capacity=3
         runs = 10
         results[algorithm] = benchmark1(sizes=sizes,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
@@ -113,6 +113,7 @@ def main2():
     results = {}
 
     for algorithm in algorithms:
+        #sizes = (*range(10, 11, 1), *range(1000, 10001, 1000))
         size = [100,100]
         capacity=[i for i in range(1,10)]
         runs = 10
@@ -128,8 +129,8 @@ def main2():
     plt.savefig("matching.png")
     plt.show()
     plt.close()
-###############################################################################################
-#PLOT COMPETITIVE RATIO EN FONCTION DE LA taille de graphes
+
+
 
 def benchmark3(sizes=[3,5,10,100,200],capacity=3, runs=100, method=ranking):
     """
@@ -154,10 +155,10 @@ def benchmark3(sizes=[3,5,10,100,200],capacity=3, runs=100, method=ranking):
                 d_R=[capacity for x in range(s)]# pour les d-graphes
                 test = method(d_L, d_R)
                 if len(test[0])>0:
-                    card_M += len(test[1])/(2*s)
+                    card_M += len(test[1])/len(test[0])
                 #card_M += len(test[1])
                 bar.update(1)
-            print("size : %d competitive ratio: %0.5f" % (s, card_M)) 
+            print("size : %d competitive ratio: %0.5f" % (s, card_M)) #C'est quoi ce charabia?
             results.append(card_M/float(runs))
     return {'sizes': sizes, 'competitive_ratio': results}
 
@@ -174,7 +175,7 @@ def main3():
 
     for algorithm in algorithms:
         sizes = [5,10,15,20,25,30,35,40,50,60,70,80,90,100]
-        capacity=2
+        capacity=4
         runs = 10
         results[algorithm] = benchmark3(sizes=sizes,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
@@ -188,7 +189,7 @@ def main3():
     plt.savefig("matching.png")
     plt.show()
     plt.close()
-##########################################################################################
+
 
 #PLOT COMPETITIVE RATIO EN FONCTION DE LA CAPACITE
 
@@ -234,9 +235,10 @@ def main4():
     results = {}
 
     for algorithm in algorithms:
-        size = [100,100]
+        #sizes = (*range(10, 11, 1), *range(1000, 10001, 1000))
+        size = [100,150]
         capacity=[i for i in range(1,20)]
-        runs = 5
+        runs = 10
         results[algorithm] = benchmark4(size=size,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
         plt.plot(results[algorithm]['capacity'], results[algorithm]['competitive_ratio'], label=str(algorithm.__name__))
@@ -251,7 +253,7 @@ def main4():
     plt.close()    
  ##############################################################################   
 if __name__ == "__main__":
-    main1()
+    #main1()
     #main2()
     #main3()
-    #main4()
+    main4()
