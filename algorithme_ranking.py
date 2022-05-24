@@ -43,7 +43,6 @@ def ranking(d_L,d_R):
     #nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
     return (eps,M)
 
-
 ### TEST ###
 #d_U=[2,3,1,3]
 #d_V=[2,1,2]
