@@ -14,14 +14,14 @@ import networkx as nx
 from networkx.algorithms import bipartite
 
 from algorithme_ranking import ranking
-from graph_generator import gready
+from algorithme_gready import gready
 import os
 
 #clearConsole = lambda: os.system('cls' if os.name in ('nt', 'dos') else 'clear')
 
 #clearConsole()
 
-def main(left=10,right=10):
+def main(left=5,right=5):
     """
     A sample main program to test our algorithms.
 
@@ -33,11 +33,13 @@ def main(left=10,right=10):
     d_L=[rd.randint(1, 3) for x in range(left)]
     d_R=[rd.randint(1, 3) for x in range(right)]
     
-    #test = gready(d_L,d_R)
-    test = ranking(d_L,d_R)
+    print("algorithme gready : ")
+    test = gready(d_L,d_R,True)
+    #print("algorithme ranking : ")
+    #test = ranking(d_L,d_R,True)
     #print (test)
-    print(len(test[0]))
-    print(len(test[1]))
+    #print(len(test[0]))
+    #print(len(test[1]))
     
 
 if __name__ == "__main__":

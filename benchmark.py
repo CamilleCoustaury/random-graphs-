@@ -14,11 +14,12 @@ import random as rd
 import tqdm as tqdm
 
 from algorithme_ranking import ranking
-from graph_generator import gready
+from algorithme_gready import gready
 
 import matplotlib.pyplot as plt
 
 
+###### ETUDE DE TEMPS D'EXECUTION ######
 def benchmark1(sizes=[3,5,10,100,1000],capacity=3, runs=100, method=ranking):
     """
     For each size in the 'sizes' list, compute the average time over a given number of runs to find the matching
@@ -85,7 +86,6 @@ def main1():
     results = {}
 
     for algorithm in algorithms:
-        #sizes = (*range(10, 11, 1), *range(1000, 10001, 1000))
         sizes = [3,5,10,20,30,40,50,100,200,300,500]
         capacity=2
         runs = 10
@@ -93,7 +93,6 @@ def main1():
         print(algorithm)
         plt.plot(results[algorithm]['sizes'], results[algorithm]['avg time'], label=str(algorithm.__name__))
 
-    #plt.show()
     plt.legend()
     plt.title("Matching algorithms execution time (capacity = %d )" %(capacity))
     plt.xlabel("Size")
@@ -128,8 +127,11 @@ def main2():
     plt.savefig("matching.png")
     plt.show()
     plt.close()
+    
 ###############################################################################################
-#PLOT COMPETITIVE RATIO EN FONCTION DE LA taille de graphes
+
+############# ETUDE COMPETITIVE RATIO ###############################
+#PLOT COMPETITIVE RATIO EN FONCTION DE LA taille de graphes #########
 
 def benchmark3(sizes=[3,5,10,100,200],capacity=3, runs=100, method=ranking):
     """
@@ -213,8 +215,6 @@ def benchmark4(size=[100,100],capacity=[i for i in range(1,20)], runs=100, metho
                 #d_R=[rd.randint(0, c) for x in range(size[1])]
                 d_R=[c for x in range(size[1])]# pour les d-graphes
                 test = method(d_L, d_R)
-                #if len(test[0])>0:
-                #   tot += len(test[1])/len(test[0])
                 tot += len(test[1])/(size[0]+size[1])
                 bar.update(1)
             print("capacity : %d, competitive ratio: %0.5f | " % (c, tot / float(runs)), end="\r\r")
@@ -236,7 +236,7 @@ def main4():
     for algorithm in algorithms:
         size = [100,100]
         capacity=[i for i in range(1,20)]
-        runs = 5
+        runs = 10
         results[algorithm] = benchmark4(size=size,capacity=capacity, runs=runs, method=algorithm)
         print(algorithm)
         plt.plot(results[algorithm]['capacity'], results[algorithm]['competitive_ratio'], label=str(algorithm.__name__))
@@ -275,8 +275,7 @@ def benchmark5(sizes=[3,5,10,100,200],capacity= 3, runs=100, method=ranking):
                 d_R=[capacity for x in range(s)]# pour les d-graphes
                 test = method(d_L, d_R)
                 if len(test[0])>0:
-                    card_M += len(test[1])/2
-                #card_M += len(test[1])
+                    card_M += len(test[1])/(2*s)
                 bar.update(1)
             print("size : %d competitive ratio: %0.5f" % (s, card_M))
             results.append(card_M/float(runs))
@@ -294,19 +293,20 @@ def main5():
     results = {}
 
     for algorithm in algorithms:
-        sizes = [5,50,100, 165, 250, 355, 480, 600, 780, 1000]
-        capacites = [2, 4, 6, 8, 10]
+        sizes = [10,20,30,50,100, 150, 200, 250, 300]
+        #sizes = [500, 600, 700, 800, 1000]
+        capacites = [2,3, 4, 6, 8]
         for i in range (len(capacites)):
             capacity=capacites[i]
-            runs = 3
+            runs = 10
             results[algorithm] = benchmark5(sizes=sizes,capacity=capacity, runs=runs, method=algorithm)
             print(algorithm)
             plt.plot(results[algorithm]['sizes'], results[algorithm]['competitive_ratio'], label= "d = " + str(capacites[i]))
         #plt.show()
         plt.legend()
-        plt.title("Matching algorithm nombre d'appariements' (Algorithme = " + str(algorithm.__name__) + ")")
+        plt.title("Competitive ratio en fonction de la taille - (Algorithme = " + str(algorithm.__name__) + ")")
         plt.xlabel("Size")
-        plt.ylabel("Nombre d'appariements")
+        plt.ylabel("Competitive ratio")
         plt.savefig(str(algorithm.__name__))
         plt.show()
         plt.close()
@@ -315,7 +315,8 @@ def main5():
  ##############################################################################
 
 if __name__ == "__main__":
-    main1()
+    #main1()
     #main2()
     #main3()
     #main4()
+    main5()

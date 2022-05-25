@@ -4,7 +4,7 @@ from numpy.random import permutation
 import networkx as nx
 from networkx.algorithms import bipartite
 
-def ranking(d_L,d_R):
+def ranking(d_L,d_R,affichage=False):
     #input :  two sequences5 of nonnegative integers
     #d_U de taille N = degrés des sommet de U c'est à dire le nombre de demi arrete que comporte chaque somment de U
     #d_V de taille T = degrés des sommets de V
@@ -40,7 +40,8 @@ def ranking(d_L,d_R):
                         M.append("L"+str(curseur))
                         M.append("R"+str(t))
     G.add_edges_from(eps)
-    #nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
+    if affichage:
+        nx.draw_networkx(G, pos = nx.drawing.layout.bipartite_layout(G, U), width = 2)
     return (eps,M)
 
 ### TEST ###
